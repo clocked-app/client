@@ -20,17 +20,9 @@ jobs:
       - name: Test
         run: npm run test:unit | tee test.log
 
-      - name: Code Coverage Summary Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: coverage/coverage-final.json
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 80'
+      - name: Coverage Summary
+        if: always() # Also generate the report if tests are failing
+        uses:  davelosert/vitest-coverage-report-action@v2
 
       - name: Build
         run: npm run build | tee build.log

@@ -1,0 +1,28 @@
+name: CI workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: node:21-alpine3.18
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test
+        run: npm run test:unit | tee test.log
+
+      - name: Build
+        run: npm run build | tee build.log
+
+      - name: Collect output artifacts
+        run: |
+          echo "# Build output" >> $GITHUB_STEP_SUMMARY
+          echo "$(cat build.log)" >> $GITHUB_STEP_SUMMARY
+          echo "# Test output" >> $GITHUB_STEP_SUMMARY
+          echo "$(cat test.log)" >> $GITHUB_STEP_SUMMARY

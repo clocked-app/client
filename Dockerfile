@@ -1,6 +1,9 @@
 # Stage 1: Base image
 FROM node:21-alpine3.18 as base
 WORKDIR /var/app/
+RUN <<EOF
+apk add bash
+EOF
 COPY . .
 
 # Stage 2: Build stage

@@ -21,10 +21,7 @@ jobs:
         run: npm run test:unit | tee test.log
 
       - name: Coverage Summary
-        if: always() # Also generate the report if tests are failing
-        uses:  davelosert/vitest-coverage-report-action@v2
-        with:
-          json-summary-path: './coverage/coverage-final.json'
+        uses: davelosert/vitest-coverage-report-action@v2
 
       - name: Build
         run: npm run build | tee build.log

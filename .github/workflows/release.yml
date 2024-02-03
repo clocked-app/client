@@ -66,5 +66,5 @@ jobs:
           tags: |
             clockedwtc/client:latest
             clockedwtc/client:${{ github.ref_name }}
-            ghcr.io/vncsmyrnk/wtc-client:latest
-            ghcr.io/vncsmyrnk/wtc-client:${{ github.ref_name }}
+            ghcr.io/clocked-app/wtc-client:latest
+            ghcr.io/clocked-app/wtc-client:${{ github.ref_name }}

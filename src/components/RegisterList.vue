@@ -47,7 +47,7 @@ interface Input {
 }
 
 let nextInputId = ref(1);
-const inputs = defineModel('inputs', { default: [] });
+const inputs = defineModel("inputs", { default: [] });
 
 const addInputOnClick = (autofocus: boolean = true) => {
   inputs.value.push({
@@ -78,7 +78,7 @@ const ruleInput = (val: string) => {
 
 const timeStringToMinutes = (time: string): number => {
   if (!time) {
-    return 0
+    return 0;
   }
   const timeParts = time.split(":");
   if (timeParts.length != 2) {

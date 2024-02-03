@@ -63,6 +63,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          build-args: |
+            "CLIENT_VERSION=${{ github.ref_name }}"
           tags: |
             clockedwtc/client:latest
             clockedwtc/client:${{ github.ref_name }}

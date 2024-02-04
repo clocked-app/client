@@ -33,3 +33,8 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
+
+      - name: Collect output artifacts
+        run: |
+          echo "# Sonar scan" >> $GITHUB_STEP_SUMMARY
+          echo "https://sonarcloud.io/project/overview?id=clocked-app_client" >> $GITHUB_STEP_SUMMARY

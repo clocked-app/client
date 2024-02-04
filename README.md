@@ -1,5 +1,18 @@
 # Front-end client for Clocked
 
+![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Quasar](https://img.shields.io/badge/Quasar-16B7FB?style=for-the-badge&logo=quasar&logoColor=black)
+<br>
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=clocked-app_client&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=clocked-app_client)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=clocked-app_client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=clocked-app_client)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=clocked-app_client&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=clocked-app_client)
+<br>
+![CI](https://github.com/clocked-app/client/actions/workflows/ci.yml/badge.svg)
+![Release](https://github.com/clocked-app/client/actions/workflows/release.yml/badge.svg)
+<br>
+<br>
+
 Simple client developed to be the main interface to Clocked operations.
 
 ## Run

@@ -49,7 +49,7 @@ describe("HomeView", () => {
     expect(wrapper.emitted().onConfirm.length).toBe(1);
 
     const clickEventParams = wrapper.emitted()
-      .onConfirm[0] as Array<OnConfirmEvtParam>;
+      .onConfirm[0] as Array<typeof OnConfirmEvtParam>;
     expect(clickEventParams[0]).toHaveProperty("workerInputs");
     expect(clickEventParams[0].workerInputs.length).toBe(2);
     expect(clickEventParams[0]).toHaveProperty("shiftInputs");

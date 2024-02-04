@@ -26,18 +26,16 @@ jobs:
       - name: Build
         run: npm run build
 
-  static-analysis:
-    runs-on: ubuntu-latest
-    steps:
-      # - name: Generate lcov test report
-      #   run: npm run test:coverage-lcov
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Generate lcov test report
+        run: npm run test:coverage-lcov
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.exclusions=coverage/lcov-report/**/*,node_modules/**/*
 
       - name: Collect output artifacts
         run: |

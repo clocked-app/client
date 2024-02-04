@@ -33,9 +33,6 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.exclusions=coverage/lcov-report/**/*,node_modules/**/*,**/__tests__/**/*
 
       - name: Collect output artifacts
         run: |

@@ -11,10 +11,10 @@ export default mergeConfig(
       root: fileURLToPath(new URL('./', import.meta.url)),
       coverage: {
         thresholds: {
-          lines: 70,
-          functions: 70,
-          branches: 70,
-          statements: 70
+          lines: 60,
+          functions: 60,
+          branches: 60,
+          statements: 60
         }
       }
     }

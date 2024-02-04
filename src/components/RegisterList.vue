@@ -36,14 +36,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, type VNodeRef } from "vue";
+import { ref, type VNodeRef } from "vue";
 
 const emit = defineEmits(["onFinish"]);
 
 interface Input {
   id: number;
   value: string | undefined;
-  ref?: VNodeRef | undefined;
+  ref?: VNodeRef;
   autofocus?: boolean;
 }
 
@@ -70,7 +70,7 @@ const showInputs = () => {
 
 const ruleInput = (val: string) => {
   const inputsValue = inputs.value;
-  const lastInputValue = inputsValue[Math.max(inputsValue.length - 2, 0)]?.value || "0";
+  const lastInputValue = inputsValue[Math.max(inputsValue.length - 2, 0)]?.value ?? "0";
   return (
     (val && timeStringToMinutes(val) >= timeStringToMinutes(lastInputValue)) ||
     "Please fill a grater time than the last one"

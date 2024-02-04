@@ -8,8 +8,8 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=clocked-app_client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=clocked-app_client)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=clocked-app_client&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=clocked-app_client)
 <br>
-![CI](https://github.com/github/docs/actions/workflows/ci.yml/badge.svg)
-![Release](https://github.com/github/docs/actions/workflows/release.yml/badge.svg)
+![CI](https://github.com/clocked-app/client/actions/workflows/ci.yml/badge.svg)
+![Release](https://github.com/clocked-app/client/actions/workflows/release.yml/badge.svg)
 <br>
 <br>
 

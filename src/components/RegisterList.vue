@@ -20,7 +20,7 @@
           dense
           flat
           icon="add"
-          @click="addInputOnClick"
+          @click="addInputOnClick()"
         />
         <q-btn
           v-else-if="input.id == nextInputId - 1 && input.id != 1"
@@ -28,7 +28,7 @@
           dense
           flat
           icon="remove"
-          @click="removeLastInputOnClick"
+          @click="removeLastInputOnClick()"
         />
       </template>
     </q-input>
@@ -36,24 +36,25 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, type VNodeRef } from "vue";
 
 const emit = defineEmits(["onFinish"]);
 
 interface Input {
   id: number;
-  value: string;
-  ref: HTMLElement;
+  value: string | undefined;
+  ref?: VNodeRef | undefined;
+  autofocus?: boolean;
 }
 
 let nextInputId = ref(1);
-const inputs = defineModel("inputs", { default: [] });
+const inputs = defineModel("inputs", { default: [] as Array<Input>});
 
 const addInputOnClick = (autofocus: boolean = true) => {
   inputs.value.push({
     id: nextInputId.value++,
-    value: null,
-    ref: null,
+    value: undefined,
+    ref: undefined,
     autofocus,
   });
 };
@@ -69,7 +70,7 @@ const showInputs = () => {
 
 const ruleInput = (val: string) => {
   const inputsValue = inputs.value;
-  const lastInputValue = inputsValue[Math.max(inputsValue.length - 2, 0)].value;
+  const lastInputValue = inputsValue[Math.max(inputsValue.length - 2, 0)]?.value || "0";
   return (
     (val && timeStringToMinutes(val) >= timeStringToMinutes(lastInputValue)) ||
     "Please fill a grater time than the last one"

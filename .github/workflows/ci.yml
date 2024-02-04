@@ -35,7 +35,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.exclusions=coverage/lcov-report/**/*,node_modules/**/*
+            -Dsonar.exclusions=coverage/lcov-report/**/*,node_modules/**/*,**/__tests__/**/*
 
       - name: Collect output artifacts
         run: |

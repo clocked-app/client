@@ -3,8 +3,8 @@
 echo "Installing neovim dependecies (neovim, git, gcc)..."
 apk add neovim git build-base
 
-echo "Installing vls (vue-language-server)..."
-npm install -g vls
+echo "Installing language servers via NPM"
+npm install -g vls typescript-language-server typescript
 
 echo "Installing packer.vim..."
 git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim || {

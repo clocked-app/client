@@ -11,11 +11,12 @@
       :label="`Register ${input.id}`"
       :key="input.id"
       :rules="[validRegisterRule, greaterThanRule]"
-      @keypress.enter.prevent="addInputOnClick(true, input)"
+      @keyup.enter.prevent="addInputOnClick(true, input)"
+      @keyup.esc.prevent="removeInputOnClick(input)"
     >
       <template v-slot:append>
         <q-btn
-          v-if="input.value && input.id >= nextInputId - 1"
+          v-if="isInputAddButtonVisible(input)"
           round
           dense
           flat
@@ -24,13 +25,13 @@
           @click="addInputOnClick(true, input)"
         />
         <q-btn
-          v-else-if="input.id == nextInputId - 1 && input.id != 1"
+          v-else-if="isInputRemoveButtonVisible(input)"
           round
           dense
           flat
           icon="remove"
           :class="`btn-${name}-${input.id}-remove`"
-          @click="removeLastInputOnClick()"
+          @click="removeInputOnClick(input)"
         />
       </template>
     </q-input>
@@ -38,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export interface Input {
   id: number;
@@ -54,7 +55,6 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { ref, type VNodeRef } from "vue";
 import { QInput } from "quasar";
 
 const emit = defineEmits(["click:add", "click:remove"]);
@@ -68,8 +68,11 @@ const props = defineProps({
   },
 });
 
-const addInputOnClick = (autofocus: boolean = true, input: Input | null = null) => {
-  if (input && !input.isValid()) return;
+const addInputOnClick = (
+  autofocus: boolean = true,
+  input: Input | null = null,
+) => {
+  if (!input || !isInputAddButtonVisible(input) || !input.isValid()) return;
   emit("click:add");
   addInput(autofocus);
 };
@@ -84,10 +87,12 @@ const addInput = (autofocus: boolean = true) => {
   });
 };
 
-const removeLastInputOnClick = () => {
+const removeInputOnClick = (input: Input) => {
+  if (!isInputRemoveButtonVisible(input)) return;
   emit("click:remove");
   inputs.value.pop();
   nextInputId.value--;
+  focusOnLastInput();
 };
 
 const validRegisterRule = (val: string) => {
@@ -116,6 +121,28 @@ const greaterThanRule = (val: string) => {
   }
 
   return true;
+};
+
+const isInputRemoveButtonVisible = (input: Input) => {
+  const inputIsTheLastVisible = input.id == nextInputId.value - 1;
+  const inputIsNotTheFirst = input.id != 1;
+  return inputIsTheLastVisible && inputIsNotTheFirst;
+};
+
+const isInputAddButtonVisible = (input: Input) => {
+  const inputHasValue = !!input.value;
+  const inputIsTheLastVisible = input.id >= nextInputId.value - 1;
+  return inputHasValue && inputIsTheLastVisible;
+};
+
+const getLastInput = (): Input | undefined => {
+  return inputs.value[inputs.value.length - 1];
+};
+
+const focusOnLastInput = () => {
+  const lastInput = getLastInput();
+  if (!lastInput || !lastInput.ref) return;
+  lastInput.ref.focus();
 };
 
 const timeStringToMinutes = (time: string): number => {

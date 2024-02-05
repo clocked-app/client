@@ -22,11 +22,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 
 export interface OnConfirmEvtParams {
-  workerInputs: typeof Input;
-  shiftInputs: typeof Input;
+  workerInputs: Input;
+  shiftInputs: Input;
 }
 
 export default defineComponent({
@@ -35,9 +35,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { reactive } from "vue";
-import RegisterList from "./../components/RegisterList.vue";
-import Input from "./../components/RegisterList.vue";
+import RegisterList, { type Input } from "./../components/RegisterList.vue";
 
 const emit = defineEmits(["onConfirm"]);
 const props = defineProps({

@@ -15,6 +15,7 @@ describe("routing", async () => {
       },
     });
 
+    // Assures that the component HomeView is rendered as the root route
     expect(wrapper.find("div.home-view-main").exists()).toBeTruthy();
   });
 });

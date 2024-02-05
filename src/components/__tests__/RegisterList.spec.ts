@@ -6,6 +6,14 @@ import RegisterList from "../RegisterList.vue";
 import { Quasar } from "quasar";
 
 describe("RegisterList", () => {
+  const testableInputProps = (i: any) => {
+    return {
+      ...i,
+      ref: null,
+      isValid: null,
+    };
+  };
+
   it("renders properly", async () => {
     const wrapper = mount(RegisterList, {
       global: {
@@ -27,7 +35,9 @@ describe("RegisterList", () => {
       },
     ];
 
-    expect(wrapper.props("inputs")).toStrictEqual(defaultInputs);
+    expect(wrapper.props("inputs").map(testableInputProps)).toStrictEqual(
+      defaultInputs.map(testableInputProps),
+    );
     expect(wrapper.find("div.register-list-test").exists()).toBeTruthy();
   });
 
@@ -137,19 +147,16 @@ describe("RegisterList", () => {
       {
         id: 1,
         value: "09:00",
-        ref: "ref-test-1",
         autofocus: false,
       },
       {
         id: 2,
         value: "12:00",
-        ref: "ref-test-2",
         autofocus: true,
       },
       {
         id: 3,
         value: undefined,
-        ref: "ref-test-3",
         autofocus: true,
       },
     ];
@@ -158,6 +165,74 @@ describe("RegisterList", () => {
     await wrapper.get(".btn-test-1-add").trigger("click");
     await wrapper.get(".input-test-2 input").setValue("1200");
     await wrapper.get(".btn-test-2-add").trigger("click");
-    expect(wrapper.props("inputs")).toStrictEqual(expectedInputs);
+    expect(wrapper.props("inputs").map(testableInputProps)).toStrictEqual(
+      expectedInputs.map(testableInputProps),
+    );
+  });
+
+  it("Validates input provided", async () => {
+    const wrapper = mount(RegisterList, {
+      global: {
+        plugins: [Quasar],
+      },
+      props: {
+        inputs: [],
+        "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
+        name: "test",
+      },
+    });
+
+    await wrapper.get(".input-test-1 input").setValue("9999");
+    expect(wrapper.props('inputs')[0].isValid()).toBeFalsy()
+
+    await wrapper.get(".input-test-1 input").setValue("0900");
+    expect(wrapper.props('inputs')[0].isValid()).toBeTruthy()
+
+    await wrapper.get(".input-test-1 input").setValue("99");
+    expect(wrapper.props('inputs')[0].isValid()).toBeFalsy()
+
+    await wrapper.get(".input-test-1 input").setValue("1259");
+    expect(wrapper.props('inputs')[0].isValid()).toBeTruthy()
+
+    await wrapper.get(".input-test-1 input").setValue("");
+    expect(wrapper.props('inputs')[0].isValid()).toBeFalsy()
+
+    await wrapper.get(".input-test-1 input").setValue("2359");
+    expect(wrapper.props('inputs')[0].isValid()).toBeTruthy()
+  });
+
+  it("Adds new inputs only if valid", async () => {
+    const wrapper = mount(RegisterList, {
+      global: {
+        plugins: [Quasar],
+      },
+      props: {
+        inputs: [],
+        "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
+        name: "test",
+      },
+    });
+
+    await wrapper.get(".input-test-1 input").setValue("9999");
+    expect(wrapper.props('inputs')[0].isValid()).toBeFalsy()
+    await wrapper.get(".btn-test-1-add").trigger("click");
+    expect(wrapper.emitted()).not.toHaveProperty("click:add");
+
+    await wrapper.get(".input-test-1 input").setValue("0102");
+    expect(wrapper.props('inputs')[0].isValid()).toBeTruthy()
+    await wrapper.get(".btn-test-1-add").trigger("click");
+    expect(wrapper.emitted('click:add')?.length).toBe(1);
+
+    await wrapper.get(".btn-test-2-remove").trigger("click");
+
+    await wrapper.get(".input-test-1 input").setValue("1");
+    expect(wrapper.props('inputs')[0].isValid()).toBeFalsy()
+    await wrapper.get(".btn-test-1-add").trigger("click");
+    expect(wrapper.emitted('click:add')?.length).toBe(1);
+
+    await wrapper.get(".input-test-1 input").setValue("1111");
+    expect(wrapper.props('inputs')[0].isValid()).toBeTruthy()
+    await wrapper.get(".btn-test-1-add").trigger("click");
+    expect(wrapper.emitted('click:add')?.length).toBe(2);
   });
 });

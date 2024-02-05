@@ -13,7 +13,7 @@ describe("HomeView", () => {
         plugins: [Quasar],
       },
       props: {
-        name: 'test'
+        name: "test",
       },
     });
 
@@ -48,8 +48,9 @@ describe("HomeView", () => {
     expect(wrapper.emitted()).toHaveProperty("onConfirm");
     expect(wrapper.emitted().onConfirm.length).toBe(1);
 
-    const clickEventParams = wrapper.emitted()
-      .onConfirm[0] as Array<typeof OnConfirmEvtParam>;
+    const clickEventParams = wrapper.emitted().onConfirm[0] as Array<
+      typeof OnConfirmEvtParam
+    >;
     expect(clickEventParams[0]).toHaveProperty("workerInputs");
     expect(clickEventParams[0].workerInputs.length).toBe(2);
     expect(clickEventParams[0]).toHaveProperty("shiftInputs");

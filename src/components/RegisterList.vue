@@ -7,11 +7,11 @@
       mask="##:##"
       :class="`q-ma-xs input-${name}-${input.id}`"
       :autofocus="input.autofocus || false"
-      :ref="input.ref"
+      :ref="(e: Input) => updateInputWithRef(e, input)"
       :label="`Register ${input.id}`"
       :key="input.id"
-      :rules="[ruleInput]"
-      @keypress.enter.prevent="input.value && addInputOnClick()"
+      :rules="[validRegisterRule, greaterThanRule]"
+      @keypress.enter.prevent="addInputOnClick(true, input)"
     >
       <template v-slot:append>
         <q-btn
@@ -21,7 +21,7 @@
           flat
           icon="add"
           :class="`btn-${name}-${input.id}-add`"
-          @click="addInputOnClick()"
+          @click="addInputOnClick(true, input)"
         />
         <q-btn
           v-else-if="input.id == nextInputId - 1 && input.id != 1"
@@ -43,7 +43,8 @@ import { defineComponent } from "vue";
 export interface Input {
   id: number;
   value: string | undefined;
-  ref?: VNodeRef;
+  isValid: () => boolean;
+  ref?: QInput;
   autofocus?: boolean;
 }
 
@@ -54,6 +55,7 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { ref, type VNodeRef } from "vue";
+import { QInput } from "quasar";
 
 const emit = defineEmits(["click:add", "click:remove"]);
 
@@ -66,7 +68,8 @@ const props = defineProps({
   },
 });
 
-const addInputOnClick = (autofocus: boolean = true) => {
+const addInputOnClick = (autofocus: boolean = true, input: Input | null = null) => {
+  if (input && !input.isValid()) return;
   emit("click:add");
   addInput(autofocus);
 };
@@ -75,7 +78,8 @@ const addInput = (autofocus: boolean = true) => {
   inputs.value.push({
     id: nextInputId.value++,
     value: undefined,
-    ref: `ref-${props.name}-${nextInputId.value - 1}`,
+    isValid: () => false,
+    ref: undefined,
     autofocus,
   });
 };
@@ -86,14 +90,32 @@ const removeLastInputOnClick = () => {
   nextInputId.value--;
 };
 
-const ruleInput = (val: string) => {
+const validRegisterRule = (val: string) => {
+  if (!val) {
+    return "Please fill the digits";
+  }
+  if (val.length != 5) {
+    return "Please fill a all digits";
+  }
+
+  const [minutes, seconds] = val.split(":");
+  if (parseInt(minutes, 10) > 59 || parseInt(seconds, 10) > 59) {
+    return "Please fill valid values for minutes and seconds";
+  }
+
+  return true;
+};
+
+const greaterThanRule = (val: string) => {
   const inputsValue = inputs.value;
   const lastInputValue =
     inputsValue[Math.max(inputsValue.length - 2, 0)]?.value ?? "0";
-  return (
-    (val && timeStringToMinutes(val) >= timeStringToMinutes(lastInputValue)) ||
-    "Please fill a grater time than the last one"
-  );
+
+  if (val && timeStringToMinutes(val) < timeStringToMinutes(lastInputValue)) {
+    return "Please fill a grater time than the last one";
+  }
+
+  return true;
 };
 
 const timeStringToMinutes = (time: string): number => {
@@ -105,6 +127,15 @@ const timeStringToMinutes = (time: string): number => {
     return 0;
   }
   return parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+};
+
+const updateInputWithRef = async (e: any, input: Input) => {
+  const existingInput = inputs.value.find((i) => i.id == input.id);
+  if (!existingInput) return;
+  input.ref = e;
+  input.isValid = () => {
+    return e.validate();
+  };
 };
 
 addInput(false);

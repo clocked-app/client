@@ -141,7 +141,7 @@ const getLastInput = (): Input | undefined => {
 
 const focusOnLastInput = () => {
   const lastInput = getLastInput();
-  if (!lastInput || !lastInput.ref) return;
+  if (!lastInput?.ref) return;
   lastInput.ref.focus();
 };
 

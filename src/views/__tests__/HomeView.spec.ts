@@ -17,16 +17,30 @@ describe("HomeView", () => {
       },
     });
 
+    // On render, the contents should be inside a div with a classe name based
+    // on the name prop
     expect(wrapper.find("div.home-view-test").exists()).toBeTruthy();
+
+    // It should be visible a version element with the app version
     expect(wrapper.get(".version").text()).toMatch(/v(\d+\.)(\d+\.)(\*|\d+)/);
+
+    // It should render a list title with the appropriate name
     expect(wrapper.get(".worker-list .list-title").text()).toBe(
       "Worker registers",
     );
+
+    // It should render a list title with the appropriate name
     expect(wrapper.get(".shift-list .list-title").text()).toBe(
       "Shift registers",
     );
+
+    // It should render the worker register list component
     expect(wrapper.find("div.register-list-worker").exists()).toBeTruthy();
+
+    // It should render the shift register list component
     expect(wrapper.find("div.register-list-shift").exists()).toBeTruthy();
+
+    // A confirm button must be visible
     expect(wrapper.find("button.confirm").exists()).toBeTruthy();
   });
 
@@ -38,16 +52,22 @@ describe("HomeView", () => {
       props: {},
     });
 
+    // Inserts two registers on the worker list
     await wrapper.get(".input-worker-1 input").setValue("0905");
     await wrapper.get(".btn-worker-1-add").trigger("click");
     await wrapper.get(".input-worker-2 input").setValue("1205");
 
+    // Insert one register on the worker list
     await wrapper.get(".input-shift-1 input").setValue("0900");
 
+    // Triggers the click on the confirm button. The event "onConfirm" should
+    // be emmited
     await wrapper.get("button.confirm").trigger("click");
     expect(wrapper.emitted()).toHaveProperty("onConfirm");
     expect(wrapper.emitted().onConfirm.length).toBe(1);
 
+    // Assures that the registers passed as arguments on the event have
+    // the expected quantity of data
     const clickEventParams = wrapper.emitted().onConfirm[0] as Array<
       typeof OnConfirmEvtParam
     >;

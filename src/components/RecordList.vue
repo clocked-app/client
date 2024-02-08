@@ -1,5 +1,5 @@
 <template>
-  <div :class="`q-mt-sm register-list-${props.name}`">
+  <div :class="`q-mt-sm record-list-${props.name}`">
     <q-input
       v-for="input of inputs"
       v-model="input.value"
@@ -8,9 +8,9 @@
       :class="`q-ma-xs input-${name}-${input.id}`"
       :autofocus="input.autofocus || false"
       :ref="(e: Input) => updateInputWithRef(e, input)"
-      :label="`Register ${input.id}`"
+      :label="`Record ${input.id}`"
       :key="input.id"
-      :rules="[validRegisterRule, greaterThanRule]"
+      :rules="[validRecordRule, greaterThanRule]"
       @keyup.enter.prevent="addInputOnClick(true, input)"
       @keyup.esc.prevent="removeInputOnClick(input)"
     >
@@ -50,7 +50,7 @@ export interface Input {
 }
 
 export default defineComponent({
-  name: "RegisterList",
+  name: "RecordList",
 });
 </script>
 
@@ -64,7 +64,7 @@ const inputs = defineModel("inputs", { default: [] as Array<Input> });
 const props = defineProps({
   name: {
     type: String,
-    default: `registerlist_${Date.now()}`,
+    default: `recordlist_${Date.now()}`,
   },
 });
 
@@ -95,7 +95,7 @@ const removeInputOnClick = (input: Input) => {
   focusOnLastInput();
 };
 
-const validRegisterRule = (val: string) => {
+const validRecordRule = (val: string) => {
   if (!val) {
     return "Please fill the digits";
   }

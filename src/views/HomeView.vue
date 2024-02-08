@@ -3,12 +3,12 @@
     <h3 class="version">{{ version }}</h3>
     <div class="col-12 row justify-center">
       <div class="col-12-sm q-mx-md worker-list" style="width: 500px">
-        <h2 class="list-title">Worker registers</h2>
-        <register-list name="worker" v-model:inputs="workerInputs" />
+        <h2 class="list-title">Worker records</h2>
+        <record-list name="worker" v-model:inputs="workerInputs" />
       </div>
       <div class="col-12-sm q-mx-md shift-list" style="width: 500px">
-        <h2 class="list-title">Shift registers</h2>
-        <register-list name="shift" v-model:inputs="shiftInputs" />
+        <h2 class="list-title">Shift records</h2>
+        <record-list name="shift" v-model:inputs="shiftInputs" />
       </div>
     </div>
     <q-btn
@@ -35,7 +35,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import RegisterList, { type Input } from "./../components/RegisterList.vue";
+import RecordList, { type Input } from "./../components/RecordList.vue";
 
 const emit = defineEmits(["onConfirm"]);
 const props = defineProps({

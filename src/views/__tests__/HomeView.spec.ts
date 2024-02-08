@@ -1,10 +1,21 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import HomeView from "../HomeView.vue";
 import OnConfirmEvtParam from "../HomeView.vue";
 
 import { Quasar } from "quasar";
+
+vi.mock("../../axios", async (importOriginal: any) => {
+  return {
+    ...await importOriginal(),
+    http: {
+      post: () => {
+        return {};
+      },
+    },
+  };
+});
 
 describe("HomeView", () => {
   it("renders properly", async () => {

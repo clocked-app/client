@@ -36,6 +36,7 @@ export default defineComponent({
 
 <script setup lang="ts">
 import RecordList, { type Input } from "./../components/RecordList.vue";
+import { http } from '../axios';
 
 const emit = defineEmits(["onConfirm"]);
 const props = defineProps({
@@ -49,7 +50,14 @@ const workerInputs = reactive([]);
 const shiftInputs = reactive([]);
 const version = import.meta.env.VITE_CLIENT_VERSION || "v0.0.0";
 
-const onConfirm = () => {
+const onConfirm = async () => {
   emit("onConfirm", { workerInputs, shiftInputs });
+  console.log(import.meta.env.VITE_API_URL);
+  const response = await http.post('/calculations/day', {
+    date: '2023-01-01',
+    workerRecords: [],
+    shiftRecords: [],
+  });
+  console.log(response);
 };
 </script>

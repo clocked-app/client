@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 
-import RegisterList from "../RegisterList.vue";
+import RecordList from "../RecordList.vue";
 
 import { Quasar } from "quasar";
 
-describe("RegisterList", () => {
+describe("RecordList", () => {
   // Util function to simplify comparation between inputs
   const testableInputProps = (i: any) => {
     return {
@@ -16,7 +16,7 @@ describe("RegisterList", () => {
   };
 
   it("renders properly", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -36,16 +36,16 @@ describe("RegisterList", () => {
       },
     ];
 
-    // When creaing a RegisterList it should render the first input
+    // When creaing a RecordList it should render the first input
     expect(wrapper.props("inputs").map(testableInputProps)).toStrictEqual(
       defaultInputs.map(testableInputProps),
     );
     // It should also render the contents inside a div with the name passed as a prop
-    expect(wrapper.find("div.register-list-test").exists()).toBeTruthy();
+    expect(wrapper.find("div.record-list-test").exists()).toBeTruthy();
   });
 
   it("fills inputs", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -63,7 +63,7 @@ describe("RegisterList", () => {
   });
 
   it("Adds another input when requested", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -91,7 +91,7 @@ describe("RegisterList", () => {
   });
 
   it("Adds another input on <enter>", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -119,7 +119,7 @@ describe("RegisterList", () => {
   });
 
   it("Removes an input when requested", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -146,7 +146,7 @@ describe("RegisterList", () => {
   });
 
   it("Removes input on <esc> if valid", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -203,7 +203,7 @@ describe("RegisterList", () => {
   });
 
   it("Adds on <enter> only if done on the last input", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -243,7 +243,7 @@ describe("RegisterList", () => {
   });
 
   it("v-model props are syncing as expected", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -284,7 +284,7 @@ describe("RegisterList", () => {
   });
 
   it("Validates input provided", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },
@@ -334,7 +334,7 @@ describe("RegisterList", () => {
   });
 
   it("Adds new inputs only if valid", async () => {
-    const wrapper = mount(RegisterList, {
+    const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],
       },

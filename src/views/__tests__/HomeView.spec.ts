@@ -26,25 +26,25 @@ describe("HomeView", () => {
 
     // It should render a list title with the appropriate name
     expect(wrapper.get(".worker-list .list-title").text()).toBe(
-      "Worker registers",
+      "Worker records",
     );
 
     // It should render a list title with the appropriate name
     expect(wrapper.get(".shift-list .list-title").text()).toBe(
-      "Shift registers",
+      "Shift records",
     );
 
-    // It should render the worker register list component
-    expect(wrapper.find("div.register-list-worker").exists()).toBeTruthy();
+    // It should render the worker record list component
+    expect(wrapper.find("div.record-list-worker").exists()).toBeTruthy();
 
-    // It should render the shift register list component
-    expect(wrapper.find("div.register-list-shift").exists()).toBeTruthy();
+    // It should render the shift record list component
+    expect(wrapper.find("div.record-list-shift").exists()).toBeTruthy();
 
     // A confirm button must be visible
     expect(wrapper.find("button.confirm").exists()).toBeTruthy();
   });
 
-  it("confirm button reads all registers", async () => {
+  it("confirm button reads all records", async () => {
     const wrapper = mount(HomeView, {
       global: {
         plugins: [Quasar],
@@ -52,12 +52,12 @@ describe("HomeView", () => {
       props: {},
     });
 
-    // Inserts two registers on the worker list
+    // Inserts two records on the worker list
     await wrapper.get(".input-worker-1 input").setValue("0905");
     await wrapper.get(".btn-worker-1-add").trigger("click");
     await wrapper.get(".input-worker-2 input").setValue("1205");
 
-    // Insert one register on the worker list
+    // Insert one record on the worker list
     await wrapper.get(".input-shift-1 input").setValue("0900");
 
     // Triggers the click on the confirm button. The event "onConfirm" should
@@ -66,7 +66,7 @@ describe("HomeView", () => {
     expect(wrapper.emitted()).toHaveProperty("onConfirm");
     expect(wrapper.emitted().onConfirm.length).toBe(1);
 
-    // Assures that the registers passed as arguments on the event have
+    // Assures that the records passed as arguments on the event have
     // the expected quantity of data
     const clickEventParams = wrapper.emitted().onConfirm[0] as Array<
       typeof OnConfirmEvtParam

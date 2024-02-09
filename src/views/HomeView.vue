@@ -2,9 +2,9 @@
   <div :class="`row justify-center home-view-${props.name}`">
     <h3 class="version">{{ version }}</h3>
     <div class="col-12 row justify-center">
-      <div class="col-12-sm q-mx-md worker-list" style="width: 500px">
-        <h2 class="list-title">Worker records</h2>
-        <record-list name="worker" v-model:inputs="workerInputs" />
+      <div class="col-12-sm q-mx-md registered-list" style="width: 500px">
+        <h2 class="list-title">Registered records</h2>
+        <record-list name="registered" v-model:inputs="registeredInputs" />
       </div>
       <div class="col-12-sm q-mx-md shift-list" style="width: 500px">
         <h2 class="list-title">Shift records</h2>
@@ -25,7 +25,7 @@
 import { defineComponent, reactive } from "vue";
 
 export interface OnConfirmEvtParams {
-  workerInputs: Input;
+  registeredInputs: Input;
   shiftInputs: Input;
 }
 
@@ -36,6 +36,7 @@ export default defineComponent({
 
 <script setup lang="ts">
 import RecordList, { type Input } from "./../components/RecordList.vue";
+import { http } from '../axios';
 
 const emit = defineEmits(["onConfirm"]);
 const props = defineProps({
@@ -45,11 +46,36 @@ const props = defineProps({
   },
 });
 
-const workerInputs = reactive([]);
-const shiftInputs = reactive([]);
+const registeredInputs: Input[] = reactive([]);
+const shiftInputs: Input[] = reactive([]);
 const version = import.meta.env.VITE_CLIENT_VERSION || "v0.0.0";
 
-const onConfirm = () => {
-  emit("onConfirm", { workerInputs, shiftInputs });
+const onConfirm = async () => {
+  emit("onConfirm", { registeredInputs, shiftInputs });
+  if (inputsInvalid()) {
+    return;
+  }
+  sendRecordsToAPI();
+};
+
+const inputsInvalid = () => {
+  const invalidFields = [
+    ...registeredInputs.filter(i => !i.isValid()),
+    ...shiftInputs.filter(i => !i.isValid()),
+  ];
+  return invalidFields.length > 0;
+};
+
+const sendRecordsToAPI = async () => {
+  const date = '2023-01-01';
+  await http.post('/calculations/day', {
+    date,
+    registeredRecords: [
+      ...registeredInputs.map(r => `${date} ${r.value}`)
+    ],
+    shiftRecords: [
+      ...shiftInputs.map(r => `${date} ${r.value}`)
+    ],
+  });
 };
 </script>

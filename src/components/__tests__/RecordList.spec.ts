@@ -377,7 +377,7 @@ describe("RecordList", () => {
     expect(wrapper.emitted("click:add")?.length).toBe(2);
   });
 
-  it("Validates greater than rule only with the predecessor field", async () => {
+  it("Validates greater than rule only with the predecessor input", async () => {
     const wrapper = mount(RecordList, {
       global: {
         plugins: [Quasar],

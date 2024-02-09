@@ -17,9 +17,6 @@ describe("RecordList", () => {
 
   it("renders properly", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -46,9 +43,6 @@ describe("RecordList", () => {
 
   it("fills inputs", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -64,9 +58,6 @@ describe("RecordList", () => {
 
   it("Adds another input when requested", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -92,9 +83,6 @@ describe("RecordList", () => {
 
   it("Adds another input on <enter>", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -120,9 +108,6 @@ describe("RecordList", () => {
 
   it("Removes an input when requested", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -147,9 +132,6 @@ describe("RecordList", () => {
 
   it("Removes input on <esc> if valid", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -204,9 +186,6 @@ describe("RecordList", () => {
 
   it("Adds on <enter> only if done on the last input", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -244,9 +223,6 @@ describe("RecordList", () => {
 
   it("v-model props are syncing as expected", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -285,9 +261,6 @@ describe("RecordList", () => {
 
   it("Validates input provided", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -335,9 +308,6 @@ describe("RecordList", () => {
 
   it("Adds new inputs only if valid", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
@@ -379,9 +349,6 @@ describe("RecordList", () => {
 
   it("Validates greater than rule only with the predecessor input", async () => {
     const wrapper = mount(RecordList, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         inputs: [],
         "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),

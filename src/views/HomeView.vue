@@ -36,7 +36,12 @@ export default defineComponent({
 
 <script setup lang="ts">
 import RecordList, { type Input } from "./../components/RecordList.vue";
-import { http } from '../axios';
+import { http } from "../axios";
+import { QDialog, useQuasar } from "quasar";
+import {
+  getCalculationsFromAPI,
+  type Calculation,
+} from "../controller/CalculationController";
 
 const emit = defineEmits(["onConfirm"]);
 const props = defineProps({
@@ -48,34 +53,43 @@ const props = defineProps({
 
 const registeredInputs: Input[] = reactive([]);
 const shiftInputs: Input[] = reactive([]);
+
 const version = import.meta.env.VITE_CLIENT_VERSION || "v0.0.0";
+const $q = useQuasar();
 
 const onConfirm = async () => {
   emit("onConfirm", { registeredInputs, shiftInputs });
   if (inputsInvalid()) {
     return;
   }
-  sendRecordsToAPI();
+  const calculations = await getCalculationsFromAPI({
+    date: new Date(),
+    registeredInputs,
+    shiftInputs,
+  });
+  displayCalculations(calculations);
 };
 
 const inputsInvalid = () => {
   const invalidFields = [
-    ...registeredInputs.filter(i => !i.isValid()),
-    ...shiftInputs.filter(i => !i.isValid()),
+    ...registeredInputs.filter((i) => !i.isValid()),
+    ...shiftInputs.filter((i) => !i.isValid()),
   ];
   return invalidFields.length > 0;
 };
 
-const sendRecordsToAPI = async () => {
-  const date = '2023-01-01';
-  await http.post('/calculations/day', {
-    date,
-    registeredRecords: [
-      ...registeredInputs.map(r => `${date} ${r.value}`)
-    ],
-    shiftRecords: [
-      ...shiftInputs.map(r => `${date} ${r.value}`)
-    ],
+const displayCalculations = (calculations: Calculation[]) => {
+  const workTime = (calculations.find((c) => c.type == "WORK") || { value: 0 })
+    .value;
+  const absentTime = (
+    calculations.find((c) => c.type == "ABSENT") || { value: 0 }
+  ).value;
+
+  $q.dialog({
+    title: "Calculation Results",
+    message: `<i>Work Time:</i> ${workTime}<br><i>Absent Time:</i> ${absentTime}`,
+    html: true,
+    class: "calculation-dialog",
   });
 };
 </script>

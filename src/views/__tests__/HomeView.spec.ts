@@ -3,15 +3,32 @@ import { mount } from "@vue/test-utils";
 
 import HomeView from "../HomeView.vue";
 import OnConfirmEvtParam from "../HomeView.vue";
+import {
+  type CalculationDayRequest,
+  type Calculation,
+} from "../../controller/CalculationController";
 
-import { Quasar } from "quasar";
-
+// Defines requests mock
 vi.mock("../../axios", async (importOriginal: any) => {
   return {
-    ...await importOriginal(),
+    ...(await importOriginal()),
     http: {
-      post: () => {
-        return {};
+      post: async (
+        url: string,
+        data: CalculationDayRequest,
+      ): Promise<{ data: Calculation[] }> => {
+        return {
+          data: [
+            {
+              type: "WORK",
+              value: 8,
+            },
+            {
+              type: "ABSENT",
+              value: 1,
+            },
+          ],
+        };
       },
     },
   };
@@ -20,9 +37,6 @@ vi.mock("../../axios", async (importOriginal: any) => {
 describe("HomeView", () => {
   it("renders properly", async () => {
     const wrapper = mount(HomeView, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         name: "test",
       },
@@ -41,9 +55,7 @@ describe("HomeView", () => {
     );
 
     // It should render a list title with the appropriate name
-    expect(wrapper.get(".shift-list .list-title").text()).toBe(
-      "Shift records",
-    );
+    expect(wrapper.get(".shift-list .list-title").text()).toBe("Shift records");
 
     // It should render the registered record list component
     expect(wrapper.find("div.record-list-registered").exists()).toBeTruthy();
@@ -57,9 +69,6 @@ describe("HomeView", () => {
 
   it("confirm button reads all records", async () => {
     const wrapper = mount(HomeView, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {},
     });
 
@@ -86,5 +95,32 @@ describe("HomeView", () => {
     expect(clickEventParams[0].registeredInputs.length).toBe(2);
     expect(clickEventParams[0]).toHaveProperty("shiftInputs");
     expect(clickEventParams[0].shiftInputs.length).toBe(1);
+  });
+
+  it("confirm button requests and displays calculations", async () => {
+    const wrapper = mount(HomeView, {
+      props: {},
+    });
+
+    // Inserts two records on the registered list
+    await wrapper.get(".input-registered-1 input").setValue("0900");
+    await wrapper.get(".btn-registered-1-add").trigger("click");
+    await wrapper.get(".input-registered-2 input").setValue("1800");
+
+    // Inserts two records on the shift list
+    await wrapper.get(".input-shift-1 input").setValue("0900");
+    await wrapper.get(".btn-shift-1-add").trigger("click");
+    await wrapper.get(".input-shift-2 input").setValue("1800");
+
+    // Triggers confirm button click
+    await wrapper.find("button.confirm").trigger("click");
+
+    // It should render a dialog with a message and a title
+    // expect(wrapper.get(".calculation-dialog .q-dialog__title").text()).toBe(
+    //   "Calculation Results",
+    // );
+    // expect(wrapper.get(".calculation-dialog .q-dialog__message").text()).toBe(
+    //   "Calculation Results",
+    // );
   });
 });

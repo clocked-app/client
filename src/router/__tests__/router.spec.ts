@@ -11,7 +11,7 @@ describe("routing", async () => {
 
     const wrapper = mount(App, {
       global: {
-        plugins: [Quasar, router],
+        plugins: [router],
       },
     });
 

@@ -9,7 +9,7 @@ COPY . .
 # Stage 2: Build stage
 FROM node:21-alpine3.18 AS build
 ARG CLIENT_VERSION=v0.0.0
-ENV CLIENT_VERSION=${CLIENT_VERSION}
+ENV VITE_CLIENT_VERSION=${CLIENT_VERSION}
 WORKDIR /var/app/
 COPY --from=base /var/app .
 RUN <<EOF

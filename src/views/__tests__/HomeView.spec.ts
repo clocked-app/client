@@ -36,8 +36,8 @@ describe("HomeView", () => {
     expect(wrapper.get(".version").text()).toMatch(/v(\d+\.)(\d+\.)(\*|\d+)/);
 
     // It should render a list title with the appropriate name
-    expect(wrapper.get(".worker-list .list-title").text()).toBe(
-      "Worker records",
+    expect(wrapper.get(".registered-list .list-title").text()).toBe(
+      "Registered records",
     );
 
     // It should render a list title with the appropriate name
@@ -45,8 +45,8 @@ describe("HomeView", () => {
       "Shift records",
     );
 
-    // It should render the worker record list component
-    expect(wrapper.find("div.record-list-worker").exists()).toBeTruthy();
+    // It should render the registered record list component
+    expect(wrapper.find("div.record-list-registered").exists()).toBeTruthy();
 
     // It should render the shift record list component
     expect(wrapper.find("div.record-list-shift").exists()).toBeTruthy();
@@ -63,12 +63,12 @@ describe("HomeView", () => {
       props: {},
     });
 
-    // Inserts two records on the worker list
-    await wrapper.get(".input-worker-1 input").setValue("0905");
-    await wrapper.get(".btn-worker-1-add").trigger("click");
-    await wrapper.get(".input-worker-2 input").setValue("1205");
+    // Inserts two records on the registered list
+    await wrapper.get(".input-registered-1 input").setValue("0905");
+    await wrapper.get(".btn-registered-1-add").trigger("click");
+    await wrapper.get(".input-registered-2 input").setValue("1205");
 
-    // Insert one record on the worker list
+    // Insert one record on the registered list
     await wrapper.get(".input-shift-1 input").setValue("0900");
 
     // Triggers the click on the confirm button. The event "onConfirm" should
@@ -82,8 +82,8 @@ describe("HomeView", () => {
     const clickEventParams = wrapper.emitted().onConfirm[0] as Array<
       typeof OnConfirmEvtParam
     >;
-    expect(clickEventParams[0]).toHaveProperty("workerInputs");
-    expect(clickEventParams[0].workerInputs.length).toBe(2);
+    expect(clickEventParams[0]).toHaveProperty("registeredInputs");
+    expect(clickEventParams[0].registeredInputs.length).toBe(2);
     expect(clickEventParams[0]).toHaveProperty("shiftInputs");
     expect(clickEventParams[0].shiftInputs.length).toBe(1);
   });

@@ -24,7 +24,7 @@ npm run dev
 ```
 ## Development
 
-To use the container as development environment, reuse the container created:
+To use the container as development environment of the standalone client, reuse the container created:
 
 ```bash
 docker build --target base --tag app-image .
@@ -34,6 +34,14 @@ docker run -it --name client -v "$(pwd)":/var/app -p 8080:8080 --workdir /var/ap
 docker start client
 
 # To access it on terminal
+docker exec -it client bash
+```
+To use an environment with services integration, run:
+
+```bash
+docker compose up -d
+
+# To acces the client container on terminal
 docker exec -it client bash
 ```
 

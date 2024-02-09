@@ -113,8 +113,9 @@ const validRecordRule = (val: string) => {
 
 const greaterThanRule = (val: string) => {
   const inputsValue = inputs.value;
+  const lastInputIndex = Math.max(inputsValue.map(i => i.value).indexOf(val)-1, 0);
   const lastInputValue =
-    inputsValue[Math.max(inputsValue.length - 2, 0)]?.value ?? "0";
+    inputsValue[lastInputIndex]?.value ?? "0";
 
   if (val && timeStringToMinutes(val) < timeStringToMinutes(lastInputValue)) {
     return "Please fill a grater time than the last one";

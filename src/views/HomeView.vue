@@ -46,18 +46,36 @@ const props = defineProps({
   },
 });
 
-const workerInputs = reactive([]);
-const shiftInputs = reactive([]);
+const workerInputs: Input[] = reactive([]);
+const shiftInputs: Input[] = reactive([]);
 const version = import.meta.env.VITE_CLIENT_VERSION || "v0.0.0";
 
 const onConfirm = async () => {
   emit("onConfirm", { workerInputs, shiftInputs });
-  console.log(import.meta.env.VITE_API_URL);
-  const response = await http.post('/calculations/day', {
-    date: '2023-01-01',
-    workerRecords: [],
-    shiftRecords: [],
+  if (inputsInvalid()) {
+    return;
+  }
+  sendRecordsToAPI();
+};
+
+const inputsInvalid = () => {
+  const invalidFields = [
+    ...workerInputs.filter(i => !i.isValid()),
+    ...shiftInputs.filter(i => !i.isValid()),
+  ];
+  return invalidFields.length > 0;
+};
+
+const sendRecordsToAPI = async () => {
+  const date = '2023-01-01';
+  await http.post('/calculations/day', {
+    date,
+    registeredRecords: [
+      ...workerInputs.map(r => `${date} ${r.value}`)
+    ],
+    shiftRecords: [
+      ...shiftInputs.map(r => `${date} ${r.value}`)
+    ],
   });
-  console.log(response);
 };
 </script>

@@ -376,4 +376,34 @@ describe("RecordList", () => {
     await wrapper.get(".btn-test-1-add").trigger("click");
     expect(wrapper.emitted("click:add")?.length).toBe(2);
   });
+
+  it("Validates greater than rule only with the predecessor field", async () => {
+    const wrapper = mount(RecordList, {
+      global: {
+        plugins: [Quasar],
+      },
+      props: {
+        inputs: [],
+        "onUpdate:inputs": (e: any[]) => wrapper.setProps({ inputs: e }),
+        name: "test",
+      },
+    });
+
+    // Inserts 3 valid inputs
+    await wrapper.get(".input-test-1 input").setValue("0900");
+    await wrapper.get(".btn-test-1-add").trigger("click");
+    await wrapper.get(".input-test-2 input").setValue("1800");
+    await wrapper.get(".btn-test-2-add").trigger("click");
+    await wrapper.get(".input-test-3 input").setValue("2100");
+
+    // Insert invalid lesser value on the fourth input
+    await wrapper.get(".btn-test-3-add").trigger("click");
+    await wrapper.get(".input-test-4 input").setValue("1900");
+
+    // Only the incorrect input should be marked as invalid
+    expect(wrapper.props("inputs")[0].isValid()).toBeTruthy();
+    expect(wrapper.props("inputs")[1].isValid()).toBeTruthy();
+    expect(wrapper.props("inputs")[2].isValid()).toBeTruthy();
+    expect(wrapper.props("inputs")[3].isValid()).toBeFalsy();
+  });
 });

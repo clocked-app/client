@@ -36,8 +36,7 @@ export default defineComponent({
 
 <script setup lang="ts">
 import RecordList, { type Input } from "./../components/RecordList.vue";
-import { http } from "../axios";
-import { QDialog, useQuasar } from "quasar";
+import { useQuasar } from "quasar";
 import {
   getCalculationsFromAPI,
   type Calculation,
@@ -85,10 +84,10 @@ const inputsInvalid = () => {
 };
 
 const displayCalculations = (calculations: Calculation[]) => {
-  const workTime = (calculations.find((c) => c.type == "WORK") || { value: 0 })
+  const workTime = (calculations.find((c) => c.type == "WORK") ?? { value: 0 })
     .value;
   const absentTime = (
-    calculations.find((c) => c.type == "ABSENT") || { value: 0 }
+    calculations.find((c) => c.type == "ABSENT") ?? { value: 0 }
   ).value;
 
   $q.dialog({

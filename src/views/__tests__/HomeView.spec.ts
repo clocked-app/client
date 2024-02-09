@@ -3,9 +3,7 @@ import { mount } from "@vue/test-utils";
 
 import HomeView from "../HomeView.vue";
 import OnConfirmEvtParam from "../HomeView.vue";
-import {
-  type Calculation,
-} from "../../controller/CalculationController";
+import { type Calculation } from "../../controller/CalculationController";
 import { http } from "../../axios";
 import { format } from "date-fns";
 

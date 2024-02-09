@@ -3,15 +3,28 @@ import { mount } from "@vue/test-utils";
 
 import HomeView from "../HomeView.vue";
 import OnConfirmEvtParam from "../HomeView.vue";
+import { type Calculation } from "../../controller/CalculationController";
+import { http } from "../../axios";
+import { format } from "date-fns";
 
-import { Quasar } from "quasar";
-
+// Defines requests mock
 vi.mock("../../axios", async (importOriginal: any) => {
   return {
-    ...await importOriginal(),
+    ...(await importOriginal()),
     http: {
-      post: () => {
-        return {};
+      post: async (): Promise<{ data: Calculation[] }> => {
+        return {
+          data: [
+            {
+              type: "WORK",
+              value: 8,
+            },
+            {
+              type: "ABSENT",
+              value: 1,
+            },
+          ],
+        };
       },
     },
   };
@@ -20,9 +33,6 @@ vi.mock("../../axios", async (importOriginal: any) => {
 describe("HomeView", () => {
   it("renders properly", async () => {
     const wrapper = mount(HomeView, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {
         name: "test",
       },
@@ -41,9 +51,7 @@ describe("HomeView", () => {
     );
 
     // It should render a list title with the appropriate name
-    expect(wrapper.get(".shift-list .list-title").text()).toBe(
-      "Shift records",
-    );
+    expect(wrapper.get(".shift-list .list-title").text()).toBe("Shift records");
 
     // It should render the registered record list component
     expect(wrapper.find("div.record-list-registered").exists()).toBeTruthy();
@@ -57,9 +65,6 @@ describe("HomeView", () => {
 
   it("confirm button reads all records", async () => {
     const wrapper = mount(HomeView, {
-      global: {
-        plugins: [Quasar],
-      },
       props: {},
     });
 
@@ -86,5 +91,71 @@ describe("HomeView", () => {
     expect(clickEventParams[0].registeredInputs.length).toBe(2);
     expect(clickEventParams[0]).toHaveProperty("shiftInputs");
     expect(clickEventParams[0].shiftInputs.length).toBe(1);
+  });
+
+  it("confirm button requests and displays calculations", async () => {
+    const wrapper = mount(HomeView, {
+      props: {},
+    });
+
+    const spy = vi.spyOn(wrapper.vm.$q, "dialog");
+
+    // Inserts two records on the registered list
+    await wrapper.get(".input-registered-1 input").setValue("0900");
+    await wrapper.get(".btn-registered-1-add").trigger("click");
+    await wrapper.get(".input-registered-2 input").setValue("0910");
+
+    // Inserts two records on the shift list
+    await wrapper.get(".input-shift-1 input").setValue("0900");
+    await wrapper.get(".btn-shift-1-add").trigger("click");
+    await wrapper.get(".input-shift-2 input").setValue("0930");
+
+    // Triggers confirm button click
+    await wrapper.find("button.confirm").trigger("click");
+
+    // It should render a dialog with a message and a title
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith({
+      title: "Calculation Results",
+      message: "<i>Work Time:</i> 8<br><i>Absent Time:</i> 1",
+      html: true,
+      class: "calculation-dialog",
+    });
+  });
+
+  it("confirm button requests to expected endpoint", async () => {
+    const wrapper = mount(HomeView, {
+      props: {},
+    });
+
+    // Override http mock to test endpoint calls
+    const spy = vi.spyOn(http, "post").mockImplementation(async () => {
+      return {
+        data: [],
+      };
+    });
+
+    const date = format(new Date(), "yyyy-MM-dd");
+
+    // Inserts two records on the registered list
+    await wrapper.get(".input-registered-1 input").setValue("0900");
+    await wrapper.get(".btn-registered-1-add").trigger("click");
+    await wrapper.get(".input-registered-2 input").setValue("0910");
+
+    // Inserts two records on the shift list
+    await wrapper.get(".input-shift-1 input").setValue("0900");
+    await wrapper.get(".btn-shift-1-add").trigger("click");
+    await wrapper.get(".input-shift-2 input").setValue("0930");
+
+    // Triggers confirm button click
+    await wrapper.find("button.confirm").trigger("click");
+
+    // It should call a specific endpoint with matching input's data
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith("/calculations/day", {
+      date,
+      registeredRecords: [`${date} 09:00`, `${date} 09:10`],
+      shiftRecords: [`${date} 09:00`, `${date} 09:30`],
+    });
   });
 });

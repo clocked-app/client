@@ -4,19 +4,17 @@ import { mount } from "@vue/test-utils";
 import HomeView from "../HomeView.vue";
 import OnConfirmEvtParam from "../HomeView.vue";
 import {
-  type CalculationDayRequest,
   type Calculation,
 } from "../../controller/CalculationController";
+import { http } from "../../axios";
+import { format } from "date-fns";
 
 // Defines requests mock
 vi.mock("../../axios", async (importOriginal: any) => {
   return {
     ...(await importOriginal()),
     http: {
-      post: async (
-        url: string,
-        data: CalculationDayRequest,
-      ): Promise<{ data: Calculation[] }> => {
+      post: async (): Promise<{ data: Calculation[] }> => {
         return {
           data: [
             {
@@ -102,25 +100,64 @@ describe("HomeView", () => {
       props: {},
     });
 
+    const spy = vi.spyOn(wrapper.vm.$q, "dialog");
+
     // Inserts two records on the registered list
     await wrapper.get(".input-registered-1 input").setValue("0900");
     await wrapper.get(".btn-registered-1-add").trigger("click");
-    await wrapper.get(".input-registered-2 input").setValue("1800");
+    await wrapper.get(".input-registered-2 input").setValue("0910");
 
     // Inserts two records on the shift list
     await wrapper.get(".input-shift-1 input").setValue("0900");
     await wrapper.get(".btn-shift-1-add").trigger("click");
-    await wrapper.get(".input-shift-2 input").setValue("1800");
+    await wrapper.get(".input-shift-2 input").setValue("0930");
 
     // Triggers confirm button click
     await wrapper.find("button.confirm").trigger("click");
 
     // It should render a dialog with a message and a title
-    // expect(wrapper.get(".calculation-dialog .q-dialog__title").text()).toBe(
-    //   "Calculation Results",
-    // );
-    // expect(wrapper.get(".calculation-dialog .q-dialog__message").text()).toBe(
-    //   "Calculation Results",
-    // );
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith({
+      title: "Calculation Results",
+      message: "<i>Work Time:</i> 8<br><i>Absent Time:</i> 1",
+      html: true,
+      class: "calculation-dialog",
+    });
+  });
+
+  it("confirm button requests to expected endpoint", async () => {
+    const wrapper = mount(HomeView, {
+      props: {},
+    });
+
+    // Override http mock to test endpoint calls
+    const spy = vi.spyOn(http, "post").mockImplementation(async () => {
+      return {
+        data: [],
+      };
+    });
+
+    const date = format(new Date(), "yyyy-MM-dd");
+
+    // Inserts two records on the registered list
+    await wrapper.get(".input-registered-1 input").setValue("0900");
+    await wrapper.get(".btn-registered-1-add").trigger("click");
+    await wrapper.get(".input-registered-2 input").setValue("0910");
+
+    // Inserts two records on the shift list
+    await wrapper.get(".input-shift-1 input").setValue("0900");
+    await wrapper.get(".btn-shift-1-add").trigger("click");
+    await wrapper.get(".input-shift-2 input").setValue("0930");
+
+    // Triggers confirm button click
+    await wrapper.find("button.confirm").trigger("click");
+
+    // It should call a specific endpoint with matching input's data
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith("/calculations/day", {
+      date,
+      registeredRecords: [`${date} 09:00`, `${date} 09:10`],
+      shiftRecords: [`${date} 09:00`, `${date} 09:30`],
+    });
   });
 });

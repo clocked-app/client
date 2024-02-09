@@ -57,6 +57,12 @@ const shiftInputs: Input[] = reactive([]);
 const version = import.meta.env.VITE_CLIENT_VERSION || "v0.0.0";
 const $q = useQuasar();
 
+const example = () => {
+  return 1;
+};
+
+example();
+
 const onConfirm = async () => {
   emit("onConfirm", { registeredInputs, shiftInputs });
   if (inputsInvalid()) {

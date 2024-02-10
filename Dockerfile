@@ -21,9 +21,9 @@ EOF
 LABEL org.opencontainers.image.source=https://github.com/clocked-app/client
 # FROM nginx:latest
 FROM nginxinc/nginx-unprivileged:stable-bullseye
-COPY --from=build --chown=nginx /var/app/dist /usr/share/nginx/html
-COPY --from=build --chown=nginx /var/app/update-env-vars-on-build.sh /docker-entrypoint.d
-COPY --from=build --chown=nginx /var/app/.env.production /tmp
+COPY --from=build --chown=nginx --chmod="644 -R" /var/app/dist /usr/share/nginx/html
+COPY --from=build --chown=nginx --chmod=744 /var/app/update-env-vars-on-build.sh /docker-entrypoint.d
+COPY --from=build --chown=nginx --chmod=644 /var/app/.env.production /tmp
 EXPOSE 80
 ENTRYPOINT ["/docker-entrypoint.sh", "nginx", "-g", "daemon off;"]
 # ENTRYPOINT ["nginx", "-g", "daemon off;"]

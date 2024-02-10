@@ -19,5 +19,5 @@ while IFS= read -r line; do
   fi
 done < $env_file_path
 
-rm $env_file_path
+rm -f $env_file_path
 exit 0

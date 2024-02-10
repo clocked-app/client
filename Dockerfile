@@ -19,9 +19,11 @@ EOF
 
 # Stage 3: Optimized deploy-ready image
 LABEL org.opencontainers.image.source=https://github.com/clocked-app/client
-FROM nginx:latest
-COPY --from=build /var/app/dist /usr/share/nginx/html
-COPY --from=build /var/app/.env.production /tmp
-COPY --from=build /var/app/update-env-vars-on-build.sh /docker-entrypoint.d
+# FROM nginx:latest
+FROM nginxinc/nginx-unprivileged:stable-bullseye
+COPY --from=build --chown=nginx /var/app/dist /usr/share/nginx/html
+COPY --from=build --chown=nginx /var/app/update-env-vars-on-build.sh /docker-entrypoint.d
+COPY --from=build --chown=nginx /var/app/.env.production /tmp
 EXPOSE 80
 ENTRYPOINT ["/docker-entrypoint.sh", "nginx", "-g", "daemon off;"]
+# ENTRYPOINT ["nginx", "-g", "daemon off;"]

@@ -1,4 +1,4 @@
-import axios, { Axios, type AxiosInstance } from "axios";
+import axios, { Axios } from "axios";
 
 const getApiUrlEnvVar = async (): Promise<string> => {
   const response = await axios.get("/env");

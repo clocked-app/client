@@ -56,6 +56,6 @@ The release automated workflow publishes the docker images on [Docker Hub](https
 After pulling the images from the most appropriate location, execute one of the following commands to run the image:
 
 ```bash
-docker run --rm -p {PORT}:80 ghcr.io/clocked-app/client:{VERSION} # or
-docker run --rm -p {PORT}:80 clockedwtc/client:{VERSION}
-
+docker run --rm -p {PORT}:8080 ghcr.io/clocked-app/client:{VERSION} # or
+docker run --rm -p {PORT}:8080 clockedwtc/client:{VERSION}
+```

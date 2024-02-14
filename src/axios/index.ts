@@ -1,9 +1,4 @@
 import axios, { type AxiosInstance } from "axios";
-import { type App } from "vue";
-
-interface EnvironmentVariables {
-  [key: string]: any;
-};
 
 const getApiUrlEnvVar = async (): Promise<string> => {
   const response = await axios.get("/env");

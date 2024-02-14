@@ -1,13 +1,13 @@
-import axios, { type AxiosInstance } from "axios";
+import axios, { Axios, type AxiosInstance } from "axios";
 
 const getApiUrlEnvVar = async (): Promise<string> => {
   const response = await axios.get("/env");
   return response.data['VITE_API_URL'] ?? null;
 };
 
-const buildInstance = async (): Promise<AxiosInstance> => {
+const buildInstance = async (mode: string = 'production'): Promise<Axios> => {
   let apiUrl = '';
-  if (import.meta.env.PROD) {
+  if (mode == 'production') {
     apiUrl = await getApiUrlEnvVar();
   } else {
     apiUrl = import.meta.env.VITE_API_URL;
@@ -17,6 +17,6 @@ const buildInstance = async (): Promise<AxiosInstance> => {
   });
 };
 
-const http = await buildInstance();
+const http = await buildInstance(import.meta.env.MODE);
 
-export { http };
+export { http, buildInstance };

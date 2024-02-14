@@ -25,9 +25,3 @@ const buildInstance = async (): Promise<AxiosInstance> => {
 const http = await buildInstance();
 
 export { http };
-
-export default {
-  install(app: App) {
-    app.provide("http", http);
-  },
-};

@@ -10,6 +10,8 @@ services:
       context: .
       target: base
     container_name: client
+    environment:
+      - VITE_API_URL=http://localhost:3000
     stdin_open: true
     tty: true
     depends_on:

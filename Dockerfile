@@ -20,7 +20,7 @@ EOF
 # Stage 3: Optimized deploy-ready image
 LABEL org.opencontainers.image.source=https://github.com/clocked-app/client
 FROM nginxinc/nginx-unprivileged:stable-bullseye
-# RUN rm -rf /usr/share/nginx/html
 COPY --from=build /var/app/dist /usr/share/nginx/html
+COPY --from=build /var/app/nginx.conf.template /nginx.conf.template
 EXPOSE 8080
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/bin/sh" , "-c" , "envsubst < /nginx.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]

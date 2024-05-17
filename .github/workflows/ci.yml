@@ -38,3 +38,25 @@ jobs:
         run: |
           echo "# Sonar scan" >> $GITHUB_STEP_SUMMARY
           echo "https://sonarcloud.io/project/overview?id=clocked-app_client" >> $GITHUB_STEP_SUMMARY
+
+  standalone-artifact-upload:
+    if: github.ref == 'refs/heads/main'
+    needs: ci
+    runs-on: ubuntu-latest
+    container: node:21-alpine3.18
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm i --ignore-scripts
+
+      - name: Build project
+        run: VITE_API_URL=${{ secrets.API_URL }} npm run build-standalone
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: |
+            ./dist

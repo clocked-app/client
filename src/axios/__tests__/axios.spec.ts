@@ -33,10 +33,10 @@ describe("Axios-http module", async () => {
     });
   });
 
-  it("sets the environment var as the uri in standalone mode", async () => {
+  it("sets the environment var as the uri in gh-pages mode", async () => {
     const spyCreate = vi.spyOn(axios, "create");
 
-    await buildInstance('standalone');
+    await buildInstance('gh-pages');
     expect(spyCreate).toBeCalledTimes(1);
     expect(spyCreate).toBeCalledWith({
       baseURL: import.meta.env.VITE_API_URL

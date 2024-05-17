@@ -7,6 +7,9 @@ import { quasar } from '@quasar/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: (process.env.MODE == 'gh-pages')
+    ? '/client/'
+    : '/',
   plugins: [
     vue(),
     vueJsx(),

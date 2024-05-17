@@ -52,7 +52,7 @@ jobs:
         run: npm i --ignore-scripts
 
       - name: Build project
-        run: VITE_API_URL=${{ secrets.API_URL }} npm run build-standalone
+        run: VITE_API_URL=${{ secrets.VITE_API_URL }} npm run build-standalone
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4

@@ -32,4 +32,14 @@ describe("Axios-http module", async () => {
       baseURL: import.meta.env.VITE_API_URL
     });
   });
+
+  it("sets the environment var as the uri in standalone mode", async () => {
+    const spyCreate = vi.spyOn(axios, "create");
+
+    await buildInstance('standalone');
+    expect(spyCreate).toBeCalledTimes(1);
+    expect(spyCreate).toBeCalledWith({
+      baseURL: import.meta.env.VITE_API_URL
+    });
+  });
 });

@@ -10,6 +10,9 @@ export default defineConfig({
   base: (process.env.NODE_ENV == 'gh-pages')
     ? '/client/'
     : '/',
+  envDir: (process.env.NODE_ENV == 'gh-pages')
+    ? '/client/'
+    : '/',
   plugins: [
     vue(),
     vueJsx(),
